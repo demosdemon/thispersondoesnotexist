@@ -25,6 +25,7 @@ install:
 
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
+  - export SECRET_KEY=$(openssl rand -base64 42)
   - npm run lint
   - npm run build
   - flask lint
