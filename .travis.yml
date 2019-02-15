@@ -1,7 +1,9 @@
 # Config file for automatic testing at travis-ci.org
 language: python
+services:
+  - postgresql
 env:
-  - FLASK_APP=autoapp.py FLASK_DEBUG=1
+  - FLASK_APP=autoapp.py FLASK_DEBUG=1 DATABASE_URL=postgres://postgres@localhost/travis_ci_test
 python:
   - 2.7
   - 3.4
@@ -14,6 +16,7 @@ install:
   - nvm use 6.10
   - npm install
 before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
   - npm run lint
   - npm run build
   - flask lint
