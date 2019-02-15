@@ -1,17 +1,27 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+from __future__ import absolute_import
+
 from flask import Flask, render_template
-
 from thispersondoesnotexist import commands, public, user
-from thispersondoesnotexist.extensions import bcrypt, cache, csrf_protect, db, debug_toolbar, login_manager, migrate, webpack
+from thispersondoesnotexist.extensions import (
+    bcrypt,
+    cache,
+    csrf_protect,
+    db,
+    debug_toolbar,
+    login_manager,
+    migrate,
+    webpack,
+)
 
 
-def create_app(config_object='thispersondoesnotexist.settings'):
+def create_app(config_object="thispersondoesnotexist.settings"):
     """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split('.')[0])
+    app = Flask(__name__.split(".")[0])
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
@@ -43,11 +53,13 @@ def register_blueprints(app):
 
 def register_errorhandlers(app):
     """Register error handlers."""
+
     def render_error(error):
         """Render error template."""
         # If a HTTPException, pull the `code` attribute; default to 500
-        error_code = getattr(error, 'code', 500)
-        return render_template('{0}.html'.format(error_code)), error_code
+        error_code = getattr(error, "code", 500)
+        return render_template("{0}.html".format(error_code)), error_code
+
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
     return None
@@ -55,11 +67,10 @@ def register_errorhandlers(app):
 
 def register_shellcontext(app):
     """Register shell context objects."""
+
     def shell_context():
         """Shell context objects."""
-        return {
-            'db': db,
-            'User': user.models.User}
+        return {"db": db, "User": user.models.User}
 
     app.shell_context_processor(shell_context)
 

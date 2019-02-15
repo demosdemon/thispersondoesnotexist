@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Factories to help in tests."""
+from __future__ import absolute_import
+
 from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory
-
 from thispersondoesnotexist.database import db
 from thispersondoesnotexist.user.models import User
 
@@ -20,9 +21,9 @@ class BaseFactory(SQLAlchemyModelFactory):
 class UserFactory(BaseFactory):
     """User factory."""
 
-    username = Sequence(lambda n: 'user{0}'.format(n))
-    email = Sequence(lambda n: 'user{0}@example.com'.format(n))
-    password = PostGenerationMethodCall('set_password', 'example')
+    username = Sequence(lambda n: "user{0}".format(n))
+    email = Sequence(lambda n: "user{0}@example.com".format(n))
+    password = PostGenerationMethodCall("set_password", "example")
     active = True
 
     class Meta:
