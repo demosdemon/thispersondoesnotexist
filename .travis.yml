@@ -1,23 +1,33 @@
 # Config file for automatic testing at travis-ci.org
 language: python
+
 services:
   - postgresql
+
+dist: xenial
+addons:
+  apt:
+    packages:
+      - libgnutls-dev
+
 env:
   - FLASK_APP=autoapp.py FLASK_DEBUG=1 DATABASE_URL=postgres://postgres@localhost/travis_ci_test
+
 python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
+  - 3.7
+
 install:
   - pip install pipenv
   - pipenv install --deploy --system --dev
-  - nvm install 6.10
-  - nvm use 6.10
+  - nvm install 10.13.0
+  - nvm use 10.13.0
   - npm install
+
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - npm run lint
   - npm run build
   - flask lint
-script: flask test
+
+script:
+  - flask test
